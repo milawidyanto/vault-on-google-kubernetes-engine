@@ -1,6 +1,7 @@
 {
   "hosts": [
-    "cluster.local"
+    "cluster.local",
+    "34.101.95.214"
   ],
   "key": {
     "algo": "rsa",
@@ -8,11 +9,11 @@
   },
   "names": [
     {
-      "C": "US",
-      "L": "Portland",
-      "O": "Kubernetes",
-      "OU": "CA",
-      "ST": "Oregon"
+      "C": "ID",
+      "L": "Bandung",
+      "O": "99",
+      "OU": "PT WMI",
+      "ST": "Indonesia"
     }
   ]
 }

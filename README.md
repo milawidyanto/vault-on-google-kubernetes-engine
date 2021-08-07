@@ -18,7 +18,7 @@ In this section you will create a new GCP project and enable the APIs required b
 Generate a project ID:
 
 ```
-PROJECT_ID="vault-$(($(date +%s%d)/1000000))"
+export PROJECT_ID="core-v3-283604"
 ```
 
 Create a new GCP project:
@@ -45,19 +45,11 @@ gcloud services enable \
 ### Set Configuration
 
 ```
-COMPUTE_ZONE="us-west1-c"
-```
-
-```
-COMPUTE_REGION="us-west1"
-```
-
-```
-GCS_BUCKET_NAME="${PROJECT_ID}-vault-storage"
-```
-
-```
-KMS_KEY_ID="projects/${PROJECT_ID}/locations/global/keyRings/vault/cryptoKeys/vault-init"
+export PROJECT_ID="core-v3-283604"
+export COMPUTE_ZONE="asia-southeast2-b"
+export COMPUTE_REGION="asia-southeast2"
+export GCS_BUCKET_NAME="${PROJECT_ID}-vault-storage"
+export KMS_KEY_ID="projects/${PROJECT_ID}/locations/global/keyRings/vault/cryptoKeys/vault-init"
 ```
 
 ### Create KMS Keyring and Crypto Key
@@ -164,6 +156,11 @@ gcloud compute addresses create vault \
 Store the `vault` compute address in an environment variable:
 
 ```
+
+VAULT_LOAD_BALANCER_IP=kubectl get svc \
+   vault-load-balancer \
+   -o jsonpath={.status.loadBalancer.ingress[0].ip}
+   
 VAULT_LOAD_BALANCER_IP=$(gcloud compute addresses describe vault \
   --region ${COMPUTE_REGION} \
   --project ${PROJECT_ID} \
@@ -322,6 +319,10 @@ Source the `vault.env` script to configure the vault CLI to use the Vault cluste
 ```
 source vault.env
 ```
+
+Before the next steps, don't forget to do these steps on the client:
+- port-forward the pod/svc to localhost
+- add the ca.pem as ca.crt to OS's trusted CA
 
 Get the status of the Vault cluster:
 

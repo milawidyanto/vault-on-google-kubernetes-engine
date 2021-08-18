@@ -129,11 +129,12 @@ In this section you will provision a three node Kubernetes cluster using [Google
 Create the `vault` Kubernetes cluster:
 
 ```
-gcloud container clusters create vault \
+gcloud container clusters create poc-vault \
   --enable-autorepair \
   --machine-type e2-standard-2 \
   --service-account vault-server@${PROJECT_ID}.iam.gserviceaccount.com \
-  --num-nodes 3 \
+  --num-nodes 2 \
+  --preemptible \
   --zone ${COMPUTE_ZONE} \
   --project ${PROJECT_ID}
 ```
@@ -184,7 +185,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname="vault,vault.default.svc.cluster.local,localhost,127.0.0.1,${VAULT_LOAD_BALANCER_IP}" \
+  -hostname="vault,vault.default.svc.cluster.local,localhost,127.0.0.1,34.101.95.214" \
   -profile=default \
   vault-csr.json | cfssljson -bare vault
 ```
@@ -372,15 +373,11 @@ vault secrets enable -version=2 kv
 ```
 
 ```
-vault kv enable-versioning secret/
+vault kv get kv/test
 ```
 
 ```
-vault kv put secret/my-secret my-value=s3cr3t
-```
-
-```
-vault kv get secret/my-secret
+vault kv put kv/new-secret my-value=s3cr3t
 ```
 
 ### Clean Up
